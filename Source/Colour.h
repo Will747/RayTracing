@@ -47,10 +47,10 @@ struct Colour
 
     uint32_t GetRGBA()
     {
-        uint32_t rgba = (uint8_t)(r * UINT8_MAX) << 24;
-        rgba |= (uint8_t)(g * UINT8_MAX) << 16;
-        rgba |= (uint8_t)(b * UINT8_MAX) << 8;
-        rgba |= (uint8_t)(a * UINT8_MAX);
+        uint32_t rgba = (uint8_t)(r * UINT8_MAX);
+        rgba |= (uint8_t)(g * UINT8_MAX) << 8;
+        rgba |= (uint8_t)(b * UINT8_MAX) << 16;
+        rgba |= (uint8_t)(a * UINT8_MAX) << 24;
 
         return rgba;
     }
