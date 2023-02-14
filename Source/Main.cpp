@@ -18,6 +18,16 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    // Setup scaling for high DPI monitors
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    float scale, yScale;
+    glfwGetMonitorContentScale(monitor, &scale, &yScale);
+
+    if (scale > 1)
+    {
+        glfwWindowHint(GLFW_SCALE_TO_MONITOR, GL_TRUE);
+    }
+
     constexpr int window_width = 1280;
     constexpr int window_height = 720;
     const std::string window_title = "Ray Tracing Demo";
@@ -44,12 +54,21 @@ int main()
 
     // Setup ImGui Style
     ImGui::StyleColorsDark();
+    ImGuiStyle& Style = ImGui::GetStyle();
+    Style.ScaleAllSizes(scale);
 
     // Setup Glfw and OpenGL backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 130");
+
+    // Add font that will scale for high DPI display
+    ImGuiIO& io = ImGui::GetIO();
+    io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f * scale);
+
+    // Enable docking
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     
-    Viewport mainViewport(300, 300);
+    Viewport mainViewport(800, 800);
 
     // Main loop
     while (!glfwWindowShouldClose(window))

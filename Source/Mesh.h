@@ -24,6 +24,8 @@ public:
      */
     virtual double DoesRayHit(Ray ray, Colour& outColour) const = 0;
 
+    void DrawUI() override;
+
     /** @returns The position of this mesh. */
     Vector3 GetPosition() const;
 

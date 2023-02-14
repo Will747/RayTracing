@@ -15,7 +15,7 @@ Sphere::Sphere(Vector3 inPosition, double inRadius, Colour inColour) : Mesh(inPo
 
 void Sphere::DrawUI()
 {
-    Component::DrawUI();
+    Mesh::DrawUI();
 
     ImGui::ColorEdit3("Sphere Colour", (float*) &colour);
 

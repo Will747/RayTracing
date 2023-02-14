@@ -18,7 +18,4 @@ public:
      * @returns The unique name of this component.
      */
     virtual std::string GetName() = 0;
-
-    /** True when selected by the properties panel. */
-    bool selected = false;
 };

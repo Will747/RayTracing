@@ -1,6 +1,8 @@
 ﻿#include "Viewport.h"
 
 #include <vector>
+#include <cstdlib> 
+#include <ctime>
 
 #include "Colour.h"
 #include "Ray.h"
@@ -11,10 +13,7 @@ Viewport::Viewport(int32_t width, int32_t height)
 {
 	texture = std::make_shared<Texture>(width, height);
 
-	// Sphere params
-	const Colour sphereColour(0.5f, 0.0f, 0.4f, 1.0f);
-	Sphere* testSphere = new Sphere(Vector3(), (double)100.f, sphereColour);
-	meshes.push_back(testSphere);
+	AddSphere();
 }
 
 void Viewport::UpdateTexture()
@@ -96,34 +95,36 @@ std::shared_ptr<Texture> Viewport::GetTexture()
 
 void Viewport::DrawUI()
 {
-	static Component* selectedComponent = nullptr;
-
 	// Controls tab
 	ImGui::Begin("Controls");
 	ImGui::ListBoxHeader("Components");
 	for (Component* component : components)
 	{
-		std::string name = component->GetName();
-		if (ImGui::Selectable(name.c_str(), component->selected))
-		{
-			component->selected = true;
-			selectedComponent = component;
-		}
+		AddComponentToList(component);
 	}
 
 	for (Component* component : meshes)
 	{
-		std::string name = component->GetName();
-		if (ImGui::Selectable(name.c_str(), component->selected))
-		{
-			component->selected = true;
-			selectedComponent = component;
-		}
+		AddComponentToList(component);
 	}
 	ImGui::ListBoxFooter();
 	
 	ImGui::Text("Viewport Controls:");
 	ImGui::ColorEdit3("Background Colour", (float*) &bgColour);
+
+	if (ImGui::Button("Add Sphere"))
+	{
+		AddSphere();
+	}
+
+	ImGui::SameLine();
+	Mesh* selectedMesh = dynamic_cast<Mesh*>(selectedComponent);
+	if (selectedMesh && ImGui::Button("Remove Sphere"))
+	{
+		meshes.erase(std::remove(meshes.begin(), meshes.end(), selectedMesh));
+		delete selectedComponent;
+		selectedComponent = nullptr;
+	}
 	
 	ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
 		ImGui::GetIO().Framerate);
@@ -139,4 +140,20 @@ void Viewport::DrawUI()
 		ImGui::Text("No component selected");
 	}
 	ImGui::End();
+}
+
+void Viewport::AddSphere()
+{
+	const double randomRadius = 30 + (double)rand() / RAND_MAX * 150.f;
+	Sphere* sphere = new Sphere(Vector3(), randomRadius, Colour::Random());
+	meshes.push_back(sphere);
+}
+
+void Viewport::AddComponentToList(Component* component)
+{
+	const std::string name = component->GetName();
+	if (ImGui::Selectable(name.c_str(), component == selectedComponent))
+	{
+		selectedComponent = component;
+	}
 }

@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include <cstdint>
+#include <cstdlib> 
+#include <ctime>
 
 struct Colour
 {
@@ -43,6 +45,14 @@ struct Colour
         g = (float)inG / UINT8_MAX;
         b = (float)inB / UINT8_MAX;
         a = (float)inA / UINT8_MAX;
+    }
+
+    /**
+     * Generates a random colour.
+     */
+    static Colour Random()
+    {
+        return { (float)rand() / RAND_MAX, (float)rand() / RAND_MAX, (float)rand() / RAND_MAX, 1.0f };
     }
 
     Colour operator*(const float x)

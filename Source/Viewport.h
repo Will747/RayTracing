@@ -39,6 +39,15 @@ public:
 	/** Background colour. */
 	Colour bgColour = Colour(0.f, 0.f, 0.f, 1.f);
 private:
+	/** Adds a new sphere to the viewport. */
+	void AddSphere();
+
+	/** Adds a component to the list in controls window. */
+	void AddComponentToList(Component* component);
+
+	/** The component currently selected. */
+	Component* selectedComponent;
+
 	/** Components that affect the viewport. */
 	std::vector<Component*> components;
 
