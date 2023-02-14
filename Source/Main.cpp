@@ -75,12 +75,8 @@ int main()
         ImGui::Image((void*)(intptr_t)image->GetTextureID(), image->GetDimensions());
         ImGui::End();
 
-        // Render the controls window
-        ImGui::Begin("Controls");
-        ImGui::ColorEdit3("Background Colour", (float*) &mainViewport.bgColour);
-        ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
-            ImGui::GetIO().Framerate);
-        ImGui::End();
+        // Render the viewport controls
+        mainViewport.DrawUI();
 
         // Render all ImGui items
         ImGui::Render();

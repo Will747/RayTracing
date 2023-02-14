@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <valarray>
 
 /**
  * A vector with three dimensions of type double.
@@ -30,8 +31,34 @@ public:
         return {x - a.x, y - a.y, z - a.z};
     }
 
-    double dot(const Vector3& a) const
+    Vector3 operator+(const Vector3& a) const
+    {
+        return {x + a.x, y + a.y, z + a.z};
+    }
+
+    Vector3 operator*(const double& a) const
+    {
+        return {x * a, y * a, z * a};
+    }
+
+    double Dot(const Vector3& a) const
     {
         return x * a.x + y * a.y + z * a.z;
+    }
+
+    double Size() const
+    {
+        return std::sqrt(x * x + y * y + z * z);
+    }
+    
+    void Normalise()
+    {
+        const double size = Size();
+        if (size != 0.0)
+        {
+            x /= size;
+            y /= size;
+            z /= size;
+        }
     }
 };

@@ -26,6 +26,7 @@
     <ClCompile Include="Libraries\imgui\imgui_draw.cpp" />
     <ClCompile Include="Libraries\imgui\imgui_tables.cpp" />
     <ClCompile Include="Libraries\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Source\Component.cpp" />
     <ClCompile Include="Source\glad.c" />
     <ClCompile Include="Source\Main.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -100,12 +101,15 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\Sphere.cpp" />
     <ClCompile Include="Source\Texture.cpp" />
     <ClCompile Include="Source\Viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Colour.h" />
+    <ClInclude Include="Source\Component.h" />
+    <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\Ray.h" />
     <ClInclude Include="Source\Sphere.h" />
     <ClInclude Include="Source\Texture.h" />

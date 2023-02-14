@@ -1,12 +1,29 @@
 ﻿#include "Sphere.h"
 
 #include <complex>
+#include <imgui.h>
 
-Sphere::Sphere(Vector3 inPosition, double inRadius, Colour inColour)
+Sphere::Sphere(Vector3 inPosition, double inRadius, Colour inColour) : Mesh(inPosition)
 {
-    position = inPosition;
     radius = inRadius;
     colour = inColour;
+
+    // Give sphere a unique id
+    sphereCount++;
+    id = sphereCount;
+}
+
+void Sphere::DrawUI()
+{
+    Component::DrawUI();
+
+    ImGui::ColorEdit3("Sphere Colour", (float*) &colour);
+
+    float radiusf = (float)radius;
+    if (ImGui::SliderFloat("Sphere Radius", &radiusf, 0, 500))
+    {
+        radius = (double)radiusf;
+    }
 }
 
 double Sphere::DoesRayHit(const Ray ray, Colour& outColour) const
@@ -23,7 +40,7 @@ double Sphere::DoesRayHit(const Ray ray, Colour& outColour) const
 
     // Camera To Sphere = v
     // v = o - c
-    const Vector3 cameraToSphere = ray.origin - position;
+    const Vector3 cameraToSphere = ray.origin - GetPosition();
 
     // These three equations merge together:
     // (v + dt)^2 = r^2
@@ -33,9 +50,9 @@ double Sphere::DoesRayHit(const Ray ray, Colour& outColour) const
     // at^2 + bt + c = 0
     // a = d^2, b = 2vd, c = v^2 - r^2
     
-    const double a = ray.direction.dot(ray.direction);
-    const double b = 2 * cameraToSphere.dot(ray.direction);
-    const double c = cameraToSphere.dot(cameraToSphere) - radius * radius;
+    const double a = ray.direction.Dot(ray.direction);
+    const double b = 2 * cameraToSphere.Dot(ray.direction);
+    const double c = cameraToSphere.Dot(cameraToSphere) - radius * radius;
 
     // Discriminant = b^2 - 4ac
     const double discriminant = b * b - 4 * a * c;
@@ -60,3 +77,15 @@ double Sphere::DoesRayHit(const Ray ray, Colour& outColour) const
 
     return t2;
 }
+
+std::string Sphere::GetName()
+{
+    return "Sphere " + std::to_string(id);
+}
+
+double Sphere::GetRadius() const
+{
+    return radius;
+}
+
+int Sphere::sphereCount = 0; 

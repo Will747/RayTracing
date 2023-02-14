@@ -45,6 +45,16 @@ struct Colour
         a = (float)inA / UINT8_MAX;
     }
 
+    Colour operator*(const float x)
+    {
+        return {r * x, g * x, b * x, a * x};
+    }
+
+    Colour operator+(const Colour x)
+    {
+        return {r + x.r, g + x.g, b + x.b, a + x.a};
+    }
+
     uint32_t GetRGBA()
     {
         uint32_t rgba = (uint8_t)(r * UINT8_MAX);
