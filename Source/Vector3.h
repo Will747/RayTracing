@@ -36,6 +36,11 @@ public:
         return {x + a.x, y + a.y, z + a.z};
     }
 
+    Vector3 operator*(const Vector3& a) const
+    {
+        return {x * a.x, y * a.y, z * a.z};
+    }
+    
     Vector3 operator*(const double& a) const
     {
         return {x * a, y * a, z * a};
@@ -44,6 +49,13 @@ public:
     double Dot(const Vector3& a) const
     {
         return x * a.x + y * a.y + z * a.z;
+    }
+
+    Vector3 CrossProduct(const Vector3& a) const
+    {
+        return {y * a.z - z * a.y,
+                z * a.x - x * a.z,
+                x * a.y - y * a.x};
     }
 
     double Size() const

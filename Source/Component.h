@@ -17,5 +17,5 @@ public:
     /**
      * @returns The unique name of this component.
      */
-    virtual std::string GetName() = 0;
+    virtual std::string GetName();
 };

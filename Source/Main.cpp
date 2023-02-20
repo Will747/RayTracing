@@ -68,7 +68,7 @@ int main()
     // Enable docking
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     
-    Viewport mainViewport(800, 800);
+    Viewport mainViewport(500, 500);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -83,6 +83,7 @@ int main()
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        ImGui::DockSpaceOverViewport();
 
         // Render the viewport
         static std::string viewportTitle = "Viewport";

@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 
+#include "Camera.h"
 #include "Colour.h"
 #include "Component.h"
 #include "Mesh.h"
@@ -43,17 +44,29 @@ private:
 	void AddSphere();
 
 	/** Adds a component to the list in controls window. */
-	void AddComponentToList(Component* component);
+	void AddComponentToList(std::shared_ptr<Component> component);
+
+	/** Creates pixel data array of the correct size for the texture. */
+	void InitPixelData();
 
 	/** The component currently selected. */
-	Component* selectedComponent;
+	std::shared_ptr<Component> selectedComponent;
 
 	/** Components that affect the viewport. */
-	std::vector<Component*> components;
+	std::vector<std::shared_ptr<Component>> components;
 
 	/** All 3D components being rendered. */
-	std::vector<Mesh*> meshes;
+	std::vector<std::shared_ptr<Mesh>> meshes;
+
+	/** The camera. */
+	std::shared_ptr<Camera> camera;
 	
     /** Texture shown by viewport. */
     std::shared_ptr<Texture> texture;
+
+	/** Raw pixel data. */
+	uint32_t* pixelData = nullptr;
+
+	/** True when the texture needs regenerating. */
+	bool bNeedsUpdate = false;
 };
