@@ -16,7 +16,7 @@ public:
      * @param inRadius The radius of the sphere.
      * @param inColour The colour of the sphere.
      */
-    Sphere(Vector3 inPosition, double inRadius, Colour inColour);
+    Sphere(Vector3 inPosition, double inRadius, Colour inColour, Viewport* viewport);
 
     void DrawUI() override;
     

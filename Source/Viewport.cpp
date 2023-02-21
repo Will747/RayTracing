@@ -1,7 +1,7 @@
 ﻿#include "Viewport.h"
 
 #include <vector>
-#include <cstdlib> 
+#include <cstdlib>
 
 #include "Colour.h"
 #include "Ray.h"
@@ -11,21 +11,37 @@
 Viewport::Viewport(int32_t width, int32_t height)
 {
 	texture = std::make_shared<Texture>(width, height);
-	camera = std::make_shared<Camera>();
+	camera = std::make_shared<Camera>(this);
 	components.push_back(camera);
 
-	InitPixelData();
+	InitPixelData(width, height);
 	AddSphere();
 }
 
-void Viewport::UpdateTexture()
+void Viewport::UpdateTexture(ImVec2 newSize)
 {
+	// Get texture dimensions
+	int width = texture->GetWidth();
+	int height = texture->GetHeight();
+	bool bSizeChanged = false;
+
+	constexpr int widthOffset = 20;
+	constexpr int heightOffset = 60;
+
+	const int newX = (int)(floor(newSize.x) - widthOffset) / 2;
+	const int newY = (int)(floor(newSize.y) - heightOffset) / 2;
+
+	if (newX != width || newY != height)
+	{
+		width = newX;
+		height = newY;
+		InitPixelData(width, height);
+
+		bSizeChanged = true;
+	}
+
 	if (bNeedsUpdate)
 	{
-		// Get texture dimensions
-		const int width = texture->GetWidth();
-		const int height = texture->GetHeight();
-
 		const Vector3 cameraPos = camera->GetPosition();
 		const Vector3 viewPlaneNormal = camera->GetDirection();
 		const Vector3 viewUpNormal = camera->GetViewUpVector();
@@ -93,9 +109,15 @@ void Viewport::UpdateTexture()
 		}
 
 		// Update the texture with the new pixels
-		texture->UpdatePixelData(pixelData);
+		if (bSizeChanged)
+		{
+			texture->UpdatePixelData(width, height, pixelData);
+		} else
+		{
+			texture->UpdatePixelData(pixelData);
+		}
 
-		//bNeedsUpdate = false;
+		bNeedsUpdate = false;
 	}
 }
 
@@ -110,7 +132,7 @@ void Viewport::DrawUI()
 	ImGui::Begin("Controls");
 	if (ImGui::ListBoxHeader("Components"))
 	{
-		for (const std::shared_ptr<Component> component : components)
+		for (const std::shared_ptr<Component>& component : components)
 		{
 			AddComponentToList(component);
 		}
@@ -154,11 +176,27 @@ void Viewport::DrawUI()
 	ImGui::End();
 }
 
+void Viewport::MarkForRender()
+{
+	bNeedsUpdate = true;
+}
+
+ImVec2 Viewport::GetDisplaySize() const
+{
+	ImVec2 Result;
+	Result.x = (float)texture->GetWidth() * 2;
+	Result.y = (float)texture->GetHeight() * 2;
+
+	return Result;
+}
+
 void Viewport::AddSphere()
 {
-	const double randomRadius = 30 + (double)rand() / RAND_MAX * 150.f;
-	std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3(), randomRadius, Colour::Random());
+	const double randomRadius = 30 + (double)rand() / RAND_MAX * 200.f;
+	std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3(), randomRadius, Colour::Random(), this);
 	meshes.push_back(sphere);
+
+	MarkForRender();
 }
 
 void Viewport::AddComponentToList(const std::shared_ptr<Component> component)
@@ -170,14 +208,10 @@ void Viewport::AddComponentToList(const std::shared_ptr<Component> component)
 	}
 }
 
-void Viewport::InitPixelData()
+void Viewport::InitPixelData(const int width, const int height)
 {
-	// Get texture dimensions
-	const int width = texture->GetWidth();
-	const int height = texture->GetHeight();
-
 	delete[] pixelData;
 	pixelData = new uint32_t[width * height];
 
-	bNeedsUpdate = true;
+	MarkForRender();
 }

@@ -67,7 +67,10 @@ int main()
 
     // Enable docking
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    
+
+    // Make random numbers from rand() more random
+    srand(time(NULL));
+
     Viewport mainViewport(500, 500);
 
     // Main loop
@@ -89,10 +92,10 @@ int main()
         static std::string viewportTitle = "Viewport";
     	ImGui::Begin(viewportTitle.c_str(), NULL);
 
-        mainViewport.UpdateTexture();
+        mainViewport.UpdateTexture(ImGui::GetWindowSize());
 
         std::shared_ptr<Texture> image = mainViewport.GetTexture();
-        ImGui::Image((void*)(intptr_t)image->GetTextureID(), image->GetDimensions());
+        ImGui::Image((void*)(intptr_t)image->GetTextureID(), mainViewport.GetDisplaySize());
         ImGui::End();
 
         // Render the viewport controls

@@ -24,8 +24,9 @@ public:
 
     /**
      * Regenerates the texture shown by the viewport.
+     * @param newSize The current size of the window.
      */
-    void UpdateTexture();
+    void UpdateTexture(ImVec2 newSize);
 
     /**
      * @return The texture that should be rendered on screen.
@@ -37,6 +38,16 @@ public:
 	 */
 	void DrawUI();
 
+	/**
+	 * Marks the viewport to be re-rendered next frame.
+	 */
+	void MarkForRender();
+
+	/**
+	 * Gets the expected size the viewport will be displayed as.
+	 */
+	ImVec2 GetDisplaySize() const;
+
 	/** Background colour. */
 	Colour bgColour = Colour(0.f, 0.f, 0.f, 1.f);
 private:
@@ -46,8 +57,8 @@ private:
 	/** Adds a component to the list in controls window. */
 	void AddComponentToList(std::shared_ptr<Component> component);
 
-	/** Creates pixel data array of the correct size for the texture. */
-	void InitPixelData();
+	/** Creates pixel data array of the correct size for four channels. */
+	void InitPixelData(int width, int height);
 
 	/** The component currently selected. */
 	std::shared_ptr<Component> selectedComponent;

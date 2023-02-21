@@ -4,7 +4,7 @@
 
 #include "Rotation.h"
 
-Camera::Camera()
+Camera::Camera(Viewport* viewport) : Component(viewport)
 {
     position = Vector3(0, 0, -400);
     viewPlaneNormal = Vector3(0, 0, 1);

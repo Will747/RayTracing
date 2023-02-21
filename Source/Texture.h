@@ -47,6 +47,11 @@ public:
     void UpdatePixelData(const void* data) const;
 
     /**
+     * Updates the texture with new pixel data and dimensions.
+     */
+    void UpdatePixelData(const int32_t inWidth, const int32_t inHeight, const void* data);
+
+    /**
      * @return The height and width of the texture.
      */
     ImVec2 GetDimensions() const;

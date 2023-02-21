@@ -3,7 +3,9 @@
 #include <complex>
 #include <imgui.h>
 
-Sphere::Sphere(Vector3 inPosition, double inRadius, Colour inColour) : Mesh(inPosition)
+#include "Viewport.h"
+
+Sphere::Sphere(Vector3 inPosition, double inRadius, Colour inColour, Viewport* viewport) : Mesh(inPosition, viewport)
 {
     radius = inRadius;
     colour = inColour;
@@ -17,12 +19,16 @@ void Sphere::DrawUI()
 {
     Mesh::DrawUI();
 
-    ImGui::ColorEdit3("Sphere Colour", (float*) &colour);
+    if (ImGui::ColorEdit3("Sphere Colour", (float*) &colour))
+    {
+        GetViewport()->MarkForRender();
+    }
 
     float radiusf = (float)radius;
     if (ImGui::SliderFloat("Sphere Radius", &radiusf, 0, 500))
     {
         radius = (double)radiusf;
+        GetViewport()->MarkForRender();
     }
 }
 

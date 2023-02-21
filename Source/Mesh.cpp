@@ -2,7 +2,9 @@
 
 #include <imgui.h>
 
-Mesh::Mesh(const Vector3 pos)
+#include "Viewport.h"
+
+Mesh::Mesh(Vector3 pos, Viewport* viewport) : Component(viewport)
 {
     position = pos;
 }
@@ -17,6 +19,8 @@ void Mesh::DrawUI()
         position.x = posF[0];
         position.y = posF[1];
         position.z = posF[2];
+
+        GetViewport()->MarkForRender();
 	}
 }
 

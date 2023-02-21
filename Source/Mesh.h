@@ -12,8 +12,9 @@ public:
     /**
      * Constructs a new mesh and sets its position.
      * @param pos Position in the world.
+     * @param viewport The viewport rendering this mesh.
      */
-    Mesh(Vector3 pos);
+    Mesh(Vector3 pos, Viewport* viewport);
     
     /**
      * Checks if a ray intersects with this mesh.

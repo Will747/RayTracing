@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include <cstdint>
-#include <cstdlib> 
-#include <ctime>
+#include <cstdlib>
 
 struct Colour
 {

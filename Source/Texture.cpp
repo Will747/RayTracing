@@ -14,24 +14,17 @@ Texture::Texture(const int32_t inWidth, const int32_t inHeight)
 
     // Generate the texture
     const std::vector<uint32_t> blankData(width * height);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,
-        0, GL_RGBA, GL_UNSIGNED_BYTE, blankData.data());
+    UpdatePixelData(inWidth, inHeight, blankData.data());
 }
 
 Texture::Texture(const int32_t inWidth, const int32_t inHeight, const void* data)
 {
-    width = inWidth;
-    height = inHeight;
-
     // Create and bind a new texture
     ID = 0;
     glGenTextures(1, &ID);
     Bind();
 
-    // Generate the texture
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,
-        0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
+    UpdatePixelData(inWidth, inHeight, data);
 }
 
 Texture::~Texture()
@@ -53,6 +46,17 @@ void Texture::UpdatePixelData(const void* data) const
 {
     Bind();
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+}
+
+void Texture::UpdatePixelData(const int32_t inWidth, const int32_t inHeight, const void* data)
+{
+    width = inWidth;
+    height = inHeight;
+
+    Bind();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,
+        0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
 }
 

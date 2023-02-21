@@ -8,7 +8,11 @@
 class Camera : public Component
 {
 public:
-    Camera();
+    /**
+     * Constructs a new camera.
+     * @param viewport The viewport using this camera.
+     */
+    Camera(Viewport* viewport);
  
     void DrawUI() override;
     std::string GetName() override;
