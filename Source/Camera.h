@@ -37,8 +37,13 @@ public:
      */
     Vector3 GetViewRightVector() const;
 private:
+    void SetViewPlaneNormal(Vector3 inViewPlaneNormal);
+ 
     Vector3 position;
     Vector3 viewPlaneNormal;
     Vector3 viewUpVector;
     Vector3 viewRightVector;
+
+    Vector3 lookAtPos;
+    float distanceFromLookAt;
 };

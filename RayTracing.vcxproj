@@ -29,6 +29,7 @@
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Component.cpp" />
     <ClCompile Include="Source\glad.c" />
+    <ClCompile Include="Source\Light.cpp" />
     <ClCompile Include="Source\Main.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -112,6 +113,7 @@
     <ClInclude Include="Source\Colour.h" />
     <ClInclude Include="Source\Component.h" />
     <ClInclude Include="Source\Constants.h" />
+    <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\Ray.h" />
     <ClInclude Include="Source\Rotation.h" />

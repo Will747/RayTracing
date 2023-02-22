@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Colour.h"
 #include "Component.h"
+#include "Light.h"
 #include "Mesh.h"
 #include "Texture.h"
 
@@ -71,6 +72,9 @@ private:
 
 	/** The camera. */
 	std::shared_ptr<Camera> camera;
+
+	/** The light. */
+	std::shared_ptr<Light> light;
 	
     /** Texture shown by viewport. */
     std::shared_ptr<Texture> texture;

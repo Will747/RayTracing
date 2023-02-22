@@ -12,7 +12,10 @@ Viewport::Viewport(int32_t width, int32_t height)
 {
 	texture = std::make_shared<Texture>(width, height);
 	camera = std::make_shared<Camera>(this);
+	light = std::make_shared<Light>(this);
+	
 	components.push_back(camera);
+	components.push_back(light);
 
 	InitPixelData(width, height);
 	AddSphere();
@@ -47,7 +50,7 @@ void Viewport::UpdateTexture(ImVec2 newSize)
 		const Vector3 viewUpNormal = camera->GetViewUpVector();
 		const Vector3 viewRightNormal = camera->GetViewRightVector();
 		
-		const Vector3 lightPos(0, 300, -400);
+		const Vector3 lightPos = light->GetPosition();
 
 		// Cycle through every pixel in the image
 #pragma omp parallel for
