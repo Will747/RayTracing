@@ -34,9 +34,16 @@ public:
      * Sets the position of this mesh.
      * @param pos The new position.
      */
-    void SetPosition(Vector3& pos);
+    void SetPosition(const Vector3& pos);
 
+protected:
+    /** Unique ID for this mesh. */
+    int id;
+ 
 private:
     /** Position of the mesh in world. */
     Vector3 position;
+
+    /** Number of meshes created since program started. */
+    static int meshCount;
 };

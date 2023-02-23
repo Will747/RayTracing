@@ -4,6 +4,7 @@
 #include <cstdlib>
 
 #include "Colour.h"
+#include "Cube.h"
 #include "Ray.h"
 #include "Sphere.h"
 #include "Vector3.h"
@@ -19,6 +20,7 @@ Viewport::Viewport(int32_t width, int32_t height)
 
 	InitPixelData(width, height);
 	AddSphere();
+	AddCube();
 }
 
 void Viewport::UpdateTexture(ImVec2 newSize)
@@ -29,7 +31,7 @@ void Viewport::UpdateTexture(ImVec2 newSize)
 	bool bSizeChanged = false;
 
 	constexpr int widthOffset = 20;
-	constexpr int heightOffset = 60;
+	constexpr int heightOffset = 40;
 
 	const int newX = (int)(floor(newSize.x) - widthOffset) / 2;
 	const int newY = (int)(floor(newSize.y) - heightOffset) / 2;
@@ -98,10 +100,10 @@ void Viewport::UpdateTexture(ImVec2 newSize)
 					Vector3 lightDirection = lightPos - pointOfIntersection;
 					lightDirection.Normalise();
 
-					float dp = (float)lightDirection.Dot(normal);
-					if (dp < 0) dp = 0;
-					if (dp > 1) dp = 1;
-					pixelColour = pixelColour * dp * lightIntensity + pixelColour * 0.3f;
+					float dotProduct = (float)lightDirection.Dot(normal);
+					if (dotProduct < 0) dotProduct = 0;
+					if (dotProduct > 1) dotProduct = 1;
+					pixelColour = pixelColour * dotProduct * lightIntensity + pixelColour * ambientLight;
 
 					pixelData[index] = pixelColour.GetRGBA();
 				}
@@ -149,7 +151,13 @@ void Viewport::DrawUI()
 	}
 	
 	ImGui::Text("Viewport Controls:");
-	ImGui::ColorEdit3("Background Colour", (float*) &bgColour);
+	if (ImGui::ColorEdit3("Background Colour", (float*) &bgColour)) MarkForRender();
+
+	const float lightIntensity = light->GetIntensity();
+	if (ImGui::DragFloat("Ambient Light Intensity", &ambientLight, .05f, .05f, 1 - lightIntensity))
+	{
+		MarkForRender();
+	}
 
 	if (ImGui::Button("Add Sphere"))
 	{
@@ -165,8 +173,8 @@ void Viewport::DrawUI()
 		MarkForRender();
 	}
 	
-	ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
-		ImGui::GetIO().Framerate);
+	ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0 / (double)ImGui::GetIO().Framerate,
+		(double)ImGui::GetIO().Framerate);
 	ImGui::End();
 
 	// Properties tab
@@ -195,11 +203,24 @@ ImVec2 Viewport::GetDisplaySize() const
 	return Result;
 }
 
+float Viewport::GetAmbientLightIntensity() const
+{
+	return ambientLight;
+}
+
 void Viewport::AddSphere()
 {
 	const double randomRadius = 30 + (double)rand() / RAND_MAX * 200.f;
 	std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3(), randomRadius, Colour::Random(), this);
 	meshes.push_back(sphere);
+
+	MarkForRender();
+}
+
+void Viewport::AddCube()
+{
+	std::shared_ptr<Cube> cube = std::make_shared<Cube>(Vector3(), this);
+	meshes.push_back(cube);
 
 	MarkForRender();
 }

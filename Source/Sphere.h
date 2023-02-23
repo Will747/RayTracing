@@ -5,7 +5,7 @@
 #include "Vector3.h"
 
 /**
- * A Sphere.
+ * A 3D Sphere that can be rendered by the viewport.
  */
 class Sphere : public Mesh
 {
@@ -32,17 +32,11 @@ public:
     std::string GetName() override;
 
     double GetRadius() const;
-
+    
 private:
     /** The colour of the sphere. */
     Colour colour;
 
     /** Radius of sphere. */
     double radius;
-
-    /** Unique ID for this sphere. */
-    int id;
-
-    /** Number of spheres created since program started. */
-    static int sphereCount;
 };

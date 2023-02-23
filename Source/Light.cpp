@@ -23,7 +23,8 @@ void Light::DrawUI()
         GetViewport()->MarkForRender();
     }
 
-    if (ImGui::DragFloat("Intensity", &intensity, 0.01f, 0, 0.7f))
+    const float viewportAmbient = GetViewport()->GetAmbientLightIntensity();
+    if (ImGui::DragFloat("Intensity", &intensity, 0.01f, .05f, 1 - viewportAmbient))
     {
         GetViewport()->MarkForRender();
     }

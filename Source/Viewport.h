@@ -49,11 +49,15 @@ public:
 	 */
 	ImVec2 GetDisplaySize() const;
 
-	/** Background colour. */
-	Colour bgColour = Colour(0.f, 0.f, 0.f, 1.f);
+	/**
+	 * @returns The ambient light intensity.
+	 */
+	float GetAmbientLightIntensity() const;
+
 private:
 	/** Adds a new sphere to the viewport. */
 	void AddSphere();
+	void AddCube();
 
 	/** Adds a component to the list in controls window. */
 	void AddComponentToList(std::shared_ptr<Component> component);
@@ -84,4 +88,10 @@ private:
 
 	/** True when the texture needs regenerating. */
 	bool bNeedsUpdate = false;
+
+	/** Background colour. */
+	Colour bgColour = Colour(0.f, 0.f, 0.f, 1.f);
+
+	/** The ambient light intensity. */
+	float ambientLight = 0.3f;
 };

@@ -12,7 +12,7 @@ Camera::Camera(Viewport* viewport) : Component(viewport)
 
     lookAtPos = Vector3();
     distanceFromLookAt = 500;
-    azimuth = 0;
+    azimuth = 180;
     altitude = 0;
     
     SetDirection(Vector3(0, 0, 1));
@@ -44,7 +44,7 @@ void Camera::DrawUI()
             UpdateBasedOnLookAt();
         }
 
-        if (ImGui::DragFloat("Altitude", &altitude, 1, -360, 360))
+        if (ImGui::DragFloat("Altitude", &altitude, 1, -89, 89))
         {
             UpdateBasedOnLookAt();
         }

@@ -9,10 +9,6 @@ Sphere::Sphere(Vector3 inPosition, double inRadius, Colour inColour, Viewport* v
 {
     radius = inRadius;
     colour = inColour;
-
-    // Give sphere a unique id
-    sphereCount++;
-    id = sphereCount;
 }
 
 void Sphere::DrawUI()
@@ -93,5 +89,3 @@ double Sphere::GetRadius() const
 {
     return radius;
 }
-
-int Sphere::sphereCount = 0; 

@@ -28,6 +28,7 @@
     <ClCompile Include="Libraries\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Component.cpp" />
+    <ClCompile Include="Source\Cube.cpp" />
     <ClCompile Include="Source\glad.c" />
     <ClCompile Include="Source\Light.cpp" />
     <ClCompile Include="Source\Main.cpp">
@@ -113,6 +114,7 @@
     <ClInclude Include="Source\Colour.h" />
     <ClInclude Include="Source\Component.h" />
     <ClInclude Include="Source\Constants.h" />
+    <ClInclude Include="Source\Cube.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\Ray.h" />

@@ -7,6 +7,10 @@
 Mesh::Mesh(Vector3 pos, Viewport* viewport) : Component(viewport)
 {
     position = pos;
+
+    // Give mesh a unique id
+    meshCount++;
+    id = meshCount;
 }
 
 void Mesh::DrawUI()
@@ -29,7 +33,9 @@ Vector3 Mesh::GetPosition() const
     return position;
 }
 
-void Mesh::SetPosition(Vector3& pos)
+void Mesh::SetPosition(const Vector3& pos)
 {
     position = pos;
 }
+
+int Mesh::meshCount = 0;
