@@ -37,13 +37,17 @@ public:
      */
     Vector3 GetViewRightVector() const;
 private:
-    void SetViewPlaneNormal(Vector3 inViewPlaneNormal);
+    void SetDirection(Vector3 inVPN);
+    void UpdateBasedOnLookAt();
  
     Vector3 position;
     Vector3 viewPlaneNormal;
     Vector3 viewUpVector;
     Vector3 viewRightVector;
 
+    // Look at params
     Vector3 lookAtPos;
     float distanceFromLookAt;
+    float azimuth;
+    float altitude;
 };

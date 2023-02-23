@@ -51,6 +51,7 @@ void Viewport::UpdateTexture(ImVec2 newSize)
 		const Vector3 viewRightNormal = camera->GetViewRightVector();
 		
 		const Vector3 lightPos = light->GetPosition();
+		const float lightIntensity = light->GetIntensity();
 
 		// Cycle through every pixel in the image
 #pragma omp parallel for
@@ -100,7 +101,7 @@ void Viewport::UpdateTexture(ImVec2 newSize)
 					float dp = (float)lightDirection.Dot(normal);
 					if (dp < 0) dp = 0;
 					if (dp > 1) dp = 1;
-					pixelColour = pixelColour * dp * 0.7f + pixelColour * 0.3f;
+					pixelColour = pixelColour * dp * lightIntensity + pixelColour * 0.3f;
 
 					pixelData[index] = pixelColour.GetRGBA();
 				}
@@ -161,6 +162,7 @@ void Viewport::DrawUI()
 	{
 		meshes.erase(std::remove(meshes.begin(), meshes.end(), selectedMesh));
 		selectedComponent = nullptr;
+		MarkForRender();
 	}
 	
 	ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,

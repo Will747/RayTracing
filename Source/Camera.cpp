@@ -9,51 +9,62 @@
 Camera::Camera(Viewport* viewport) : Component(viewport)
 {
     position = Vector3(0, 0, -400);
-    viewPlaneNormal = Vector3(0, 0, 1);
-    viewUpVector = Vector3(0, 1, 0);
-    viewRightVector = Vector3(1, 0, 0);
 
-    lookAtPos = Vector3(); 
+    lookAtPos = Vector3();
+    distanceFromLookAt = 500;
+    azimuth = 0;
+    altitude = 0;
+    
+    SetDirection(Vector3(0, 0, 1));
 }
 
 void Camera::DrawUI()
 {
     Component::DrawUI();
 
-    float posF[3] = {(float)position.x, (float)position.y, (float)position.z};
-    if (ImGui::DragFloat3("Position", posF, 1, -1000, 1000))
+    static bool bUseLookAt = false;
+    ImGui::Checkbox("Use look at", &bUseLookAt);
+
+    if (bUseLookAt)
     {
-        position.x = (double)posF[0];
-        position.y = (double)posF[1];
-        position.z = (double)posF[2];
-        GetViewport()->MarkForRender();
+        float lookAtPosF[3] = { (float)lookAtPos.x, (float)lookAtPos.y, (float)lookAtPos.z };
+        if (ImGui::DragFloat3("Look at", lookAtPosF, 1, -1000, 1000))
+        {
+            lookAtPos = Vector3((double)lookAtPosF[0], (double)lookAtPosF[1], (double)lookAtPosF[2]);
+            UpdateBasedOnLookAt();
+        }
+        
+        if (ImGui::DragFloat("Distance from look at", &distanceFromLookAt))
+        {
+            UpdateBasedOnLookAt();
+        }
+
+        if (ImGui::DragFloat("Azimuth", &azimuth, 1, -360, 360))
+        {
+            UpdateBasedOnLookAt();
+        }
+
+        if (ImGui::DragFloat("Altitude", &altitude, 1, -360, 360))
+        {
+            UpdateBasedOnLookAt();
+        }
     }
-
-    static Rotation rotation;
-    if (ImGui::DragFloat2("Direction (Yaw, Pitch)", (float*)&rotation, 1, -360, 360))
+    else
     {
-        viewPlaneNormal = rotation.ToUnitVector();
-        
-        Rotation test(viewPlaneNormal);
-        std::cout << "Original " << rotation.Pitch << " Yaw: " << rotation.Yaw << " Test: " << test.Pitch << " Yaw: " << test.Yaw;
-        
-        Rotation up = rotation;
-        up.Pitch += 90;
-        viewUpVector = up.ToUnitVector();
+        float posF[3] = {(float)position.x, (float)position.y, (float)position.z};
+        if (ImGui::DragFloat3("Position", posF, 1, -1000, 1000))
+        {
+            position.x = (double)posF[0];
+            position.y = (double)posF[1];
+            position.z = (double)posF[2];
+            GetViewport()->MarkForRender();
+        }
 
-        viewRightVector = viewPlaneNormal.CrossProduct(viewUpVector);
-
-        viewRightVector.Normalise();
-
-        GetViewport()->MarkForRender();
-    }
-
-    static float lookAtPos[3];
-    if (ImGui::DragFloat3("Look at", lookAtPos, 1, -1000, 1000))
-    {
-        const Vector3 lookAtPosVec((double)lookAtPos[0], (double)lookAtPos[1], (double)lookAtPos[2]);
-        viewPlaneNormal = position - lookAtPosVec;
-        
+        static Rotation rotation;
+        if (ImGui::DragFloat2("Direction (Yaw, Pitch)", (float*)&rotation, 1, -360, 360))
+        {
+            SetDirection(rotation.ToUnitVector());
+        }   
     }
 }
 
@@ -82,17 +93,27 @@ Vector3 Camera::GetViewRightVector() const
     return viewRightVector;
 }
 
-void Camera::SetViewPlaneNormal(Vector3 inViewPlaneNormal)
+void Camera::SetDirection(Vector3 inVPN)
 {
-    viewPlaneNormal = inViewPlaneNormal;
+    viewPlaneNormal = inVPN;
 
-    Rotation up = Rotation(viewPlaneNormal);
-    up.Pitch += 90;
-    viewUpVector = up.ToUnitVector();
-
-    viewRightVector = viewPlaneNormal.CrossProduct(viewUpVector);
-
+    viewRightVector.x = viewPlaneNormal.z;
+    viewRightVector.z = -viewPlaneNormal.x;
+    viewRightVector.y = 0;
     viewRightVector.Normalise();
 
+    viewUpVector = viewPlaneNormal.CrossProduct(viewRightVector);
+    viewUpVector.Normalise();
+
     GetViewport()->MarkForRender();   
+}
+
+void Camera::UpdateBasedOnLookAt()
+{
+    const Vector3 lookAtDirection = Rotation(azimuth, altitude, 0).ToUnitVector();
+
+    position = lookAtPos + lookAtDirection * (double)distanceFromLookAt;
+    SetDirection(-lookAtDirection);
+
+    GetViewport()->MarkForRender();
 }

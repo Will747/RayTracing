@@ -11,6 +11,8 @@ public:
     std::string GetName() override;
     
     Vector3 GetPosition() const;
+    float GetIntensity() const;
 private:
     Vector3 position;
+    float intensity;
 };

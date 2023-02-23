@@ -26,6 +26,11 @@ public:
         x = inX; y = inY; z = inZ;
     }
 
+    Vector3 operator-() const
+    {
+        return {-x, -y, -z};
+    }
+    
     Vector3 operator-(const Vector3& a) const
     {
         return {x - a.x, y - a.y, z - a.z};

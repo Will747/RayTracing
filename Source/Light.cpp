@@ -7,6 +7,7 @@
 Light::Light(Viewport* viewport) : Component(viewport)
 {
     position = Vector3(0, 300, -400);
+    intensity = 0.4f;
 }
 
 void Light::DrawUI()
@@ -21,6 +22,11 @@ void Light::DrawUI()
         position.z = (double)posF[2];
         GetViewport()->MarkForRender();
     }
+
+    if (ImGui::DragFloat("Intensity", &intensity, 0.01f, 0, 0.7f))
+    {
+        GetViewport()->MarkForRender();
+    }
 }
 
 std::string Light::GetName()
@@ -31,4 +37,9 @@ std::string Light::GetName()
 Vector3 Light::GetPosition() const
 {
     return position;
+}
+
+float Light::GetIntensity() const
+{
+    return intensity;
 }
