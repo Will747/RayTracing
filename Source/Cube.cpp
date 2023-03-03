@@ -5,11 +5,12 @@
 Cube::Cube(Vector3 pos, Viewport* viewport) : Mesh(pos, viewport)
 {
     dimensions = Vector3(50, 50, 50);
+    colour = Colour::Random();
 }
 
 double Cube::DoesRayHit(Ray ray, Vector3& normal, Colour& outColour) const
 {
-    outColour = Colour(255.f, 0, 0, 255.f);
+    outColour = colour;
 
     // Based on https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection.html
     // Intersection Point = p
@@ -31,6 +32,27 @@ double Cube::DoesRayHit(Ray ray, Vector3& normal, Colour& outColour) const
     double tUpperY = (pos.y + dimensions.y - ray.origin.y) / ray.direction.y;
     double tLowerZ = (pos.z - ray.origin.z) / ray.direction.z;
     double tUpperZ = (pos.z + dimensions.z - ray.origin.z) / ray.direction.z;
+
+    if (ray.direction.x < 0)
+    {
+        const double temp = tLowerX;
+        tLowerX = tUpperX;
+        tUpperX = temp;
+    }
+
+    if (ray.direction.y < 0)
+    {
+        const double temp = tLowerY;
+        tLowerY = tUpperY;
+        tUpperY = temp;
+    }
+
+    if (ray.direction.z < 0)
+    {
+        const double temp = tLowerZ;
+        tLowerZ = tUpperZ;
+        tUpperZ = temp;
+    }
 
     // Check if ray goes through x, y plane
     if (tLowerX > tUpperY || tLowerY > tUpperX)
@@ -105,6 +127,11 @@ void Cube::DrawUI()
 
         GetViewport()->MarkForRender();
     }
+
+    if (ImGui::ColorEdit3("Cube Colour", (float*)&colour))
+    {
+        GetViewport()->MarkForRender();
+    }
 }
 
 Vector3 Cube::GetVectorFromSide(const Side s)
@@ -112,17 +139,17 @@ Vector3 Cube::GetVectorFromSide(const Side s)
     switch (s)
     {
     case Side::Top:
-        return Vector3(0, -1, 0);
+        return Vector3(0, 1, 0);
     case Side::Left:
-        return Vector3(1, 0, 0);
-    case Side::Right:
         return Vector3(-1, 0, 0);
+    case Side::Right:
+        return Vector3(1, 0, 0);
     case Side::Back:
         return Vector3(0, 0, -1);
     case Side::Front:
         return Vector3(0, 0, 1);
     case Side::Bottom:
-        return Vector3(0, 1, 0);
+        return Vector3(0, -1, 0);
     }
 
     return Vector3();

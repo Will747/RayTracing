@@ -28,4 +28,7 @@ private:
     
     /** The size of the cube. */
     Vector3 dimensions;
+
+    /** Colour of this cube. */
+    Colour colour;
 };
