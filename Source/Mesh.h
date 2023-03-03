@@ -19,11 +19,12 @@ public:
     /**
      * Checks if a ray intersects with this mesh.
      * @param ray The ray being simulated.
+     * @param outNormal Direction pointing away from the plane being hit.
      * @param outColour The colour of the mesh at the point of intersection.
      * @return The distance from the origin of the ray to point of intersection
      * or -1 if the ray does not hit the mesh.
      */
-    virtual double DoesRayHit(Ray ray, Colour& outColour) const = 0;
+    virtual double DoesRayHit(Ray ray, Vector3& outNormal, Colour& outColour) const = 0;
 
     void DrawUI() override;
 

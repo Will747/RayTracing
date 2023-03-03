@@ -74,18 +74,21 @@ void Viewport::UpdateTexture(ImVec2 newSize)
 				Colour pixelColour;
 				const Mesh* bestMesh = nullptr;
 				double shortestDistance = UINT64_MAX;
+				Vector3 normal;
 
 				// Go through all meshes, find the closest one hit by the ray
 				for (std::shared_ptr<Mesh>& mesh : meshes)
 				{
 					Colour tempColour;
-					const double distance = mesh->DoesRayHit(ray, tempColour);
+					Vector3 tmpNormal;
+					const double distance = mesh->DoesRayHit(ray, tmpNormal, tempColour);
 
 					if (distance > 0 && distance < shortestDistance)
 					{
 						shortestDistance = distance;
 						bestMesh = mesh.get();
 						pixelColour = tempColour;
+						normal = tmpNormal;
 					}
 				}
 
@@ -94,8 +97,6 @@ void Viewport::UpdateTexture(ImVec2 newSize)
 				if (bestMesh)
 				{
 					Vector3 pointOfIntersection = rayOrigin + viewPlaneNormal * shortestDistance;
-					Vector3 normal = pointOfIntersection - bestMesh->GetPosition();
-					normal.Normalise();
 
 					Vector3 lightDirection = lightPos - pointOfIntersection;
 					lightDirection.Normalise();

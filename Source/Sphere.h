@@ -19,15 +19,7 @@ public:
     Sphere(Vector3 inPosition, double inRadius, Colour inColour, Viewport* viewport);
 
     void DrawUI() override;
-    
-    /**
-     * Checks if a ray intersects with this sphere.
-     * @param ray The ray being simulated.
-     * @param outColour The colour of the sphere at the point of intersection.
-     * @return The distance from the origin of the ray to point of intersection
-     * or -1 if the ray does not hit the sphere.
-     */
-    double DoesRayHit(Ray ray, Colour& outColour) const override;
+    double DoesRayHit(Ray ray, Vector3& outNormal, Colour& outColour) const override;
 
     std::string GetName() override;
 

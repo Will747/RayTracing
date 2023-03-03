@@ -28,7 +28,7 @@ void Sphere::DrawUI()
     }
 }
 
-double Sphere::DoesRayHit(const Ray ray, Colour& outColour) const
+double Sphere::DoesRayHit(Ray ray, Vector3& outNormal, Colour& outColour) const
 {
     // Intersection Point = p
     // Ray Origin = o
@@ -69,15 +69,20 @@ double Sphere::DoesRayHit(const Ray ray, Colour& outColour) const
     
     // t = (-b +/- sqrt(discriminant)) / 2a
     // There are two solutions but the point closest to the origin is needed
-    const double t1 = (-b + std::sqrt(discriminant)) / (2 * a);
-    const double t2 = (-b - std::sqrt(discriminant)) / (2 * a);
-
-    if (t1 < t2)
+    double t;
+    if (b < 0)
     {
-        return t1;
+        t = (-b - std::sqrt(discriminant)) / (2 * a);
+    } else
+    {
+        t = (-b + std::sqrt(discriminant)) / (2 * a);
     }
 
-    return t2;
+    const Vector3 pointOfIntersection = ray.origin + ray.direction * t;
+    outNormal = pointOfIntersection - GetPosition();
+    outNormal.Normalise();
+
+    return t;
 }
 
 std::string Sphere::GetName()
