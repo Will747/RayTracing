@@ -12,7 +12,7 @@ Camera::Camera(Viewport* viewport) : Component(viewport)
 
     lookAtPos = Vector3();
     distanceFromLookAt = 500;
-    azimuth = 180;
+    azimuth = 180.001f;
     altitude = 0;
     
     SetDirection(Vector3(0, 0, 1));

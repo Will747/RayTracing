@@ -25,6 +25,13 @@ private:
     };
 
     static Vector3 GetVectorFromSide(Side s);
+
+    double GetMinX() const;
+    double GetMaxX() const;
+    double GetMinY() const;
+    double GetMaxY() const;
+    double GetMinZ() const;
+    double GetMaxZ() const;
     
     /** The size of the cube. */
     Vector3 dimensions;

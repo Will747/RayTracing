@@ -61,7 +61,16 @@ public:
     Vector3 ToUnitVector() const
     {
         // Based on https://math.stackexchange.com/q/1637464
-        const double pitchRad = DegreesToRadians((double)Pitch);
+        double pitchRad;
+        if (Pitch == 0)
+        {
+            pitchRad = DegreesToRadians((double)Pitch + 0.001);
+        } else
+        {
+	        pitchRad = DegreesToRadians((double)Pitch);
+        }
+
+
         const double yawRad = DegreesToRadians((double)Yaw);
 
         const double pitchSin = sin(pitchRad);

@@ -4,7 +4,7 @@
 
 Cube::Cube(Vector3 pos, Viewport* viewport) : Mesh(pos, viewport)
 {
-    dimensions = Vector3(50, 50, 50);
+    dimensions = Vector3(100, 100, 100);
     colour = Colour::Random();
 }
 
@@ -26,12 +26,12 @@ double Cube::DoesRayHit(Ray ray, Vector3& normal, Colour& outColour) const
 
     const Vector3 pos = GetPosition();
     
-    double tLowerX = (pos.x  - ray.origin.x) / ray.direction.x;
-    double tUpperX = (pos.x + dimensions.x - ray.origin.x) / ray.direction.x;
-    double tLowerY = (pos.y - ray.origin.y) / ray.direction.y;
-    double tUpperY = (pos.y + dimensions.y - ray.origin.y) / ray.direction.y;
-    double tLowerZ = (pos.z - ray.origin.z) / ray.direction.z;
-    double tUpperZ = (pos.z + dimensions.z - ray.origin.z) / ray.direction.z;
+    double tLowerX = (GetMinX()  - ray.origin.x) / ray.direction.x;
+    double tUpperX = (GetMaxX() - ray.origin.x) / ray.direction.x;
+    double tLowerY = (GetMinY() - ray.origin.y) / ray.direction.y;
+    double tUpperY = (GetMaxY() - ray.origin.y) / ray.direction.y;
+    double tLowerZ = (GetMinZ() - ray.origin.z) / ray.direction.z;
+    double tUpperZ = (GetMaxZ() - ray.origin.z) / ray.direction.z;
 
     if (ray.direction.x < 0)
     {
@@ -55,7 +55,7 @@ double Cube::DoesRayHit(Ray ray, Vector3& normal, Colour& outColour) const
     }
 
     // Check if ray goes through x, y plane
-    if (tLowerX > tUpperY || tLowerY > tUpperX)
+    if (tLowerX >= tUpperY || tLowerY >= tUpperX)
     {
         return -1;
     }
@@ -81,7 +81,7 @@ double Cube::DoesRayHit(Ray ray, Vector3& normal, Colour& outColour) const
     }
 
     // Check if ray also goes within z plane
-    if (firstT > tUpperZ || secondT < tLowerZ)
+    if (firstT - 1 > tUpperZ || tLowerZ > secondT - 1)
     {
         return -1;
     }
@@ -118,7 +118,7 @@ void Cube::DrawUI()
 {
     Mesh::DrawUI();
 
-    static float dimensionsF[3] = { 50, 50, 50 };
+    static float dimensionsF[3] = { 100, 100, 100 };
     if (ImGui::DragFloat3("Size", dimensionsF, 1, 0, 200))
     {
         dimensions.x = (double)dimensionsF[0];
@@ -145,12 +145,42 @@ Vector3 Cube::GetVectorFromSide(const Side s)
     case Side::Right:
         return Vector3(1, 0, 0);
     case Side::Back:
-        return Vector3(0, 0, -1);
-    case Side::Front:
         return Vector3(0, 0, 1);
+    case Side::Front:
+        return Vector3(0, 0, -1);
     case Side::Bottom:
         return Vector3(0, -1, 0);
     }
 
     return Vector3();
+}
+
+double Cube::GetMinX() const
+{
+    return GetPosition().x - dimensions.x / 2;
+}
+
+double Cube::GetMaxX() const
+{
+    return GetPosition().x + dimensions.x / 2;
+}
+
+double Cube::GetMinY() const
+{
+    return GetPosition().y - dimensions.y / 2;
+}
+
+double Cube::GetMaxY() const
+{
+    return GetPosition().y + dimensions.y / 2;
+}
+
+double Cube::GetMinZ() const
+{
+    return GetPosition().z - dimensions.z / 2;
+}
+
+double Cube::GetMaxZ() const
+{
+    return GetPosition().z + dimensions.z / 2;
 }

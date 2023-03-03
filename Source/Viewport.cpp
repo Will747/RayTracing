@@ -164,14 +164,24 @@ void Viewport::DrawUI()
 	{
 		AddSphere();
 	}
+	ImGui::SameLine();
+
+	if (ImGui::Button("Add Cube"))
+	{
+		AddCube();
+	}
 
 	ImGui::SameLine();
-	const std::shared_ptr<Mesh> selectedMesh = std::static_pointer_cast<Mesh>(selectedComponent);
-	if (selectedMesh && ImGui::Button("Remove Sphere"))
+	const std::shared_ptr<Mesh> selectedMesh = std::dynamic_pointer_cast<Mesh>(selectedComponent);
+	if (selectedMesh)
 	{
-		meshes.erase(std::remove(meshes.begin(), meshes.end(), selectedMesh));
-		selectedComponent = nullptr;
-		MarkForRender();
+		std::string removeText = "Remove " + selectedMesh->GetName();
+		if (ImGui::Button(removeText.c_str()))
+		{
+			meshes.erase(std::remove(meshes.begin(), meshes.end(), selectedMesh));
+			selectedComponent = nullptr;
+			MarkForRender();
+		}
 	}
 	
 	ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0 / (double)ImGui::GetIO().Framerate,
@@ -212,16 +222,18 @@ float Viewport::GetAmbientLightIntensity() const
 void Viewport::AddSphere()
 {
 	const double randomRadius = 30 + (double)rand() / RAND_MAX * 200.f;
-	std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3(), randomRadius, Colour::Random(), this);
+	std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3(-50, 0, 0), randomRadius, Colour::Random(), this);
 	meshes.push_back(sphere);
+	selectedComponent = sphere;
 
 	MarkForRender();
 }
 
 void Viewport::AddCube()
 {
-	std::shared_ptr<Cube> cube = std::make_shared<Cube>(Vector3(), this);
+	std::shared_ptr<Cube> cube = std::make_shared<Cube>(Vector3(50, 0, 0), this);
 	meshes.push_back(cube);
+	selectedComponent = cube;
 
 	MarkForRender();
 }
