@@ -20,10 +20,10 @@ void Sphere::DrawUI()
         GetViewport()->MarkForRender();
     }
 
-    float radiusf = (float)radius;
-    if (ImGui::SliderFloat("Sphere Radius", &radiusf, 0, 500))
+    float radiusF = (float)radius;
+    if (ImGui::SliderFloat("Sphere Radius", &radiusF, 0, 500))
     {
-        radius = (double)radiusf;
+        radius = (double)radiusF;
         GetViewport()->MarkForRender();
     }
 }

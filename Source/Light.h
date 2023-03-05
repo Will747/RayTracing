@@ -2,6 +2,9 @@
 #include "Component.h"
 #include "Vector3.h"
 
+/**
+ * A spot light that illuminates part of the scene.
+ */
 class Light final : public Component
 {
 public:

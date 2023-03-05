@@ -20,9 +20,11 @@ public:
 
     void DrawUI() override;
     double DoesRayHit(Ray ray, Vector3& outNormal, Colour& outColour) const override;
-
     std::string GetName() override;
 
+    /**
+     * @returns The radius of the sphere.
+     */
     double GetRadius() const;
     
 private:

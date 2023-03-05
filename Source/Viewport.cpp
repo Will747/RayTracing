@@ -150,16 +150,8 @@ void Viewport::DrawUI()
 		}
 		ImGui::ListBoxFooter();
 	}
-	
-	ImGui::Text("Viewport Controls:");
-	if (ImGui::ColorEdit3("Background Colour", (float*) &bgColour)) MarkForRender();
 
-	const float lightIntensity = light->GetIntensity();
-	if (ImGui::DragFloat("Ambient Light Intensity", &ambientLight, .05f, .05f, 1 - lightIntensity))
-	{
-		MarkForRender();
-	}
-
+	// Add mesh buttons
 	if (ImGui::Button("Add Sphere"))
 	{
 		AddSphere();
@@ -171,6 +163,7 @@ void Viewport::DrawUI()
 		AddCube();
 	}
 
+	// Remove Mesh button
 	ImGui::SameLine();
 	const std::shared_ptr<Mesh> selectedMesh = std::dynamic_pointer_cast<Mesh>(selectedComponent);
 	if (selectedMesh)
@@ -183,7 +176,18 @@ void Viewport::DrawUI()
 			MarkForRender();
 		}
 	}
-	
+
+	// Miscellaneous viewport controls
+	ImGui::Text("Viewport Controls:");
+	if (ImGui::ColorEdit3("Background Colour", (float*) &bgColour)) MarkForRender();
+
+	const float lightIntensity = light->GetIntensity();
+	if (ImGui::DragFloat("Ambient Light Intensity", &ambientLight, .05f, .05f, 1 - lightIntensity))
+	{
+		MarkForRender();
+	}
+
+	// Frame rate
 	ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0 / (double)ImGui::GetIO().Framerate,
 		(double)ImGui::GetIO().Framerate);
 	ImGui::End();
@@ -222,7 +226,7 @@ float Viewport::GetAmbientLightIntensity() const
 void Viewport::AddSphere()
 {
 	const double randomRadius = 30 + (double)rand() / RAND_MAX * 200.f;
-	std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3(-50, 0, 0), randomRadius, Colour::Random(), this);
+	const std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3(-50, 0, 0), randomRadius, Colour::Random(), this);
 	meshes.push_back(sphere);
 	selectedComponent = sphere;
 
@@ -231,7 +235,7 @@ void Viewport::AddSphere()
 
 void Viewport::AddCube()
 {
-	std::shared_ptr<Cube> cube = std::make_shared<Cube>(Vector3(50, 0, 0), this);
+	const std::shared_ptr<Cube> cube = std::make_shared<Cube>(Vector3(50, 0, 0), this);
 	meshes.push_back(cube);
 	selectedComponent = cube;
 

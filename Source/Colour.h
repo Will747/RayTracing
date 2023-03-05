@@ -2,6 +2,9 @@
 #include <cstdint>
 #include <cstdlib>
 
+/**
+ * Represents a colour with red, green, blue, alpha components.
+ */
 struct Colour
 {
     /** Red component between 0 and 1. */

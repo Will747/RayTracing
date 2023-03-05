@@ -24,8 +24,10 @@ private:
         Bottom
     };
 
+    /** @returns the normal vector for a side. */
     static Vector3 GetVectorFromSide(Side s);
 
+    /* Gets a corner position of the cube. */
     double GetMinX() const;
     double GetMaxX() const;
     double GetMinY() const;

@@ -15,8 +15,6 @@ public:
      */
     explicit Component(Viewport* viewport);
 
-    virtual ~Component() = default;
-
     /**
      * Draws the ImGui controls for adjusting this component.
      */
